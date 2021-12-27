@@ -59,42 +59,47 @@ const Home = () => {
         <h2>vibes</h2>
         <p>A place to share your knowledge.</p>
       </div>
-      <div className='content_container'>
-        <div className='content_division'>
-          <h3>Global Feed</h3>
-          <p>Popular Tags</p>
-        </div>
-        <div className='contents'>
+      {
+        localStorage.hasOwnProperty('userData')
+        && JSON.parse(localStorage.getItem('userData')).loggedIn == true &&
+        (<div className='content_container'>
+          <div className='content_division'>
+            <h3>Global Feed</h3>
+            <p>Popular Tags</p>
+          </div>
+          <div className='contents'>
 
-          {feeds.map((feed) => (
-            <div className='content_info'>
-              <div className='feeds_info'>
-                <div className='feeds_user_info'>
-                  <div className='feeds_user_image'>
-                    <img src={feed.author.image} alt='user profile pic'></img>
+            {feeds.map((feed) => (
+              <div className='content_info'>
+                <div className='feeds_info'>
+                  <div className='feeds_user_info'>
+                    <div className='feeds_user_image'>
+                      <img src={feed.author.image} alt='user profile pic'></img>
+                    </div>
+                    <div className='feeds_post_info'>
+                      <p className='feeds_post_username'>{feed.author.username}</p>
+                      <p className='feeds_post_date'>{(new Date(feed.createdAt)).toLocaleDateString('en-Us', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                    </div>
                   </div>
-                  <div className='feeds_post_info'>
-                    <p className='feeds_post_username'>{feed.author.username}</p>
-                    <p className='feeds_post_date'>{(new Date(feed.createdAt)).toLocaleDateString('en-Us', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</p>
-                  </div>
+                  <p className='feeds_favorite_count'>&hearts;<span>{feed.favoritesCount}</span></p>
                 </div>
-                <p className='feeds_favorite_count'>&hearts;<span>{feed.favoritesCount}</span></p>
-              </div>
 
-              <p className='feeds_title'>{feed.title}</p>
-              <p className='feeds_sub'>{feed.description}</p>
-              <div className='feeds_extension'>
-                <p><Link to={`/feed/${feed.id}`} >Read more...</Link></p>
-                <ul>
-                  {feed.tagList.map((tagItem, index) => {
-                    return (<li key={tagItem + index}>{tagItem}</li>)
-                  })}
-                </ul>
+                <p className='feeds_title'>{feed.title}</p>
+                <p className='feeds_sub'>{feed.description}</p>
+                <div className='feeds_extension'>
+                  <p><Link to={`/feed/${feed.id}`} >Read more...</Link></p>
+                  <ul>
+                    {feed.tagList.map((tagItem, index) => {
+                      return (<li key={tagItem + index}>{tagItem}</li>)
+                    })}
+                  </ul>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
+        </div>) 
+        || <h3 className='alert_global_feed'>Sign In to view the content! <Link to="/signin">Sign In?</Link></h3>
+      }
     </div>
   )
 }
